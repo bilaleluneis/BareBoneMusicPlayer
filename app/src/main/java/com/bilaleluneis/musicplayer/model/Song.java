@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * @uthor Bilal El Uneis (bilaleluneis@gmail.com)
  * @since Jan 10 2015
- * Song Class to Store information about each song on Android device
+ * Serializable Song Class to hold information read about each song on Android device
  * Credit goes to Sue Smith for the awesome tutorial on creating Music Player for Android
  * (http://code.tutsplus.com/tutorials/create-a-music-player-on-android-project-setup--mobile-22764)
  */
