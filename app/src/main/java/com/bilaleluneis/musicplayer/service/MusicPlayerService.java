@@ -10,7 +10,7 @@ import com.bilaleluneis.musicplayer.model.Song;
 import java.util.List;
 
 /**
- * @uthor Bilal El Uneis (bilaleluneis@gmail.com)
+ * @author Bilal El Uneis (bilaleluneis@gmail.com)
  * @since Jan 14 2015
  * Simple Music Player Service to play a song, even when app is set as background process
  * Credit goes to Sue Smith for the awesome tutorial on creating Music Player for Android
@@ -21,8 +21,15 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
         MediaPlayer.OnErrorListener,
         MediaPlayer.OnCompletionListener {
 
-    private MediaPlayer musicPlayer;
+    private static MediaPlayer musicPlayer;
     private List<Song>  musicList;
+    private int songId;
+
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+    }
 
     @Override
     public void onCompletion(MediaPlayer mp) {
@@ -44,13 +51,20 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
         return null;
     }
 
+    /**
+     * this follows a singleton pattern, to make sure that only
+     * one instance of the MediaPlayer object is made available and
+     * reused
+     * @return existing instance of the music player or creates
+     * a new one and return it
+     */
     public MediaPlayer getMusicPlayer() {
+        if(musicPlayer == null) {
+            musicPlayer = new MediaPlayer();
+        }
         return musicPlayer;
     }
 
-    public void setMusicPlayer(MediaPlayer musicPlayer) {
-        this.musicPlayer = musicPlayer;
-    }
 
     public List<Song> getMusicList() {
         return musicList;
@@ -58,5 +72,16 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
 
     public void setMusicList(List<Song> musicList) {
         this.musicList = musicList;
+    }
+
+    public int getSongId() {
+        return songId;
+    }
+
+    /**
+     * @param songId the id for the song the music player will play
+     */
+    public void setSongId(int songId) {
+        this.songId = songId;
     }
 }
