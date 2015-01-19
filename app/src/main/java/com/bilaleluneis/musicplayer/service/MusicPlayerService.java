@@ -2,8 +2,10 @@ package com.bilaleluneis.musicplayer.service;
 
 import android.app.Service;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.IBinder;
+import android.os.PowerManager;
 
 import com.bilaleluneis.musicplayer.model.Song;
 
@@ -29,6 +31,7 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
     @Override
     public void onCreate() {
         super.onCreate();
+        initMusicPlayer();
     }
 
     @Override
@@ -58,9 +61,9 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
      * @return existing instance of the music player or creates
      * a new one and return it
      */
-    public MediaPlayer getMusicPlayer() {
+    protected MediaPlayer getMusicPlayer() {
         if(musicPlayer == null) {
-            musicPlayer = new MediaPlayer();
+            musicPlayer= new MediaPlayer();
         }
         return musicPlayer;
     }
@@ -83,5 +86,18 @@ public class MusicPlayerService extends Service implements MediaPlayer.OnPrepare
      */
     public void setSongId(int songId) {
         this.songId = songId;
+    }
+
+    /**
+     * this method will create instance of music player by calling getMusicPlayer()
+     * and set the properties and configure the player.
+     */
+    public void initMusicPlayer(){
+        setSongId(0);
+        getMusicPlayer().setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
+        getMusicPlayer().setAudioStreamType(AudioManager.STREAM_MUSIC);
+        getMusicPlayer().setOnPreparedListener(this);
+        getMusicPlayer().setOnCompletionListener(this);
+        getMusicPlayer().setOnErrorListener(this);
     }
 }
